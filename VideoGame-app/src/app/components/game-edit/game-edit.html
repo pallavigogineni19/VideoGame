@@ -1,0 +1,79 @@
+
+<div class="container mt-5" style="max-width: 600px;">
+  <!-- Header Row with Back Button -->
+  <div class="d-flex align-items-center mb-4">
+    <a routerLink="/catalogue" class="btn btn-outline-secondary btn-sm me-3 rounded-pill">&larr; Back to Catalogue</a>
+    <h2 class="text-secondary fw-bold mb-0">
+  {{ isEditMode() ? 'Edit Game Details' : 'Add New Video Game' }}
+</h2>
+  </div>
+
+  <!-- Error Feedback Alert Box -->
+  @if (errorMessage()) {
+    <div class="alert alert-danger shadow-sm mb-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Form Layout Container Card -->
+  <div class="card shadow-sm border-0 p-4">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Game Title Field -->
+      <div class="mb-3">
+        <label for="title" class="form-label fw-semibold text-dark">Game Title</label>
+        <input type="text" id="title" class="form-control" formControlName="title" 
+               [class.is-invalid]="editForm.get('title')?.invalid && editForm.get('title')?.touched">
+        <div class="invalid-feedback">A valid game title is required (maximum 100 characters).</div>
+      </div>
+
+      <!-- Genre Field -->
+      <div class="mb-3">
+        <label for="genre" class="form-label fw-semibold text-dark">Genre</label>
+        <input type="text" id="genre" class="form-control" formControlName="genre"
+               [class.is-invalid]="editForm.get('genre')?.invalid && editForm.get('genre')?.touched">
+        <div class="invalid-feedback">Genre field is required.</div>
+      </div>
+
+      <!-- Publisher Field -->
+      <div class="mb-3">
+        <label for="publisher" class="form-label fw-semibold text-dark">Publisher</label>
+        <input type="text" id="publisher" class="form-control" formControlName="publisher"
+               [class.is-invalid]="editForm.get('publisher')?.invalid && editForm.get('publisher')?.touched">
+        <div class="invalid-feedback">Publisher details are required.</div>
+      </div>
+
+      <!-- Twin Split Row columns for Date and Score Layout -->
+      <div class="row">
+        <!-- Release Date Picker Field -->
+        <div class="col-md-6 mb-3">
+          <label for="releaseDate" class="form-label fw-semibold text-dark">Release Date</label>
+          <input type="date" id="releaseDate" class="form-control" formControlName="releaseDate"
+                 [class.is-invalid]="editForm.get('releaseDate')?.invalid && editForm.get('releaseDate')?.touched">
+          <div class="invalid-feedback">A release date must be selected.</div>
+        </div>
+
+        <!-- Metacritic Number Score Input Field -->
+        <div class="col-md-6 mb-3">
+          <label for="metacriticScore" class="form-label fw-semibold text-dark">Metacritic Score</label>
+          <input type="number" id="metacriticScore" class="form-control" formControlName="metacriticScore"
+                 [class.is-invalid]="editForm.get('metacriticScore')?.invalid && editForm.get('metacriticScore')?.touched">
+          <div class="invalid-feedback">Score must be evaluated between 0 and 100.</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons Row Layer -->
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <a routerLink="/catalogue" class="btn btn-light px-4 border">Cancel</a>
+        <button type="submit" class="btn btn-primary px-4" [disabled]="editForm.invalid || isSaving()">
+          @if (isSaving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span> Saving...
+          } @else {
+            Save Changes
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
