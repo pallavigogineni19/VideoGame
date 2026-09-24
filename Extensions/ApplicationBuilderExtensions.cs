@@ -1,18 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VideoGame.Data;
+﻿using VideoGame.Data;
+using VideoGame.Middleware;
+using Microsoft.EntityFrameworkCore;
 
 namespace VideoGame.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
+    public static IApplicationBuilder UseGlobalExceptionHandler(
+        this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<GlobalExceptionMiddleware>();
+    }
+
     public static async Task InitializeDatabaseAsync(
         this IApplicationBuilder app)
     {
         using var scope = app.ApplicationServices.CreateScope();
 
         var services = scope.ServiceProvider;
-        var logger = services.GetRequiredService<ILogger<ApplicationDbContext>>();
-        var dbContext = services.GetRequiredService<ApplicationDbContext>();
+
+        var logger = services
+            .GetRequiredService<ILogger<ApplicationDbContext>>();
+
+        var dbContext = services
+            .GetRequiredService<ApplicationDbContext>();
 
         try
         {
@@ -22,19 +33,15 @@ public static class ApplicationBuilderExtensions
             await dbContext.Database.MigrateAsync();
 
             logger.LogInformation(
-                "Database structure initialized successfully.");
+                "Database initialized successfully.");
         }
         catch (Exception ex)
         {
             logger.LogCritical(
                 ex,
-                "An error occurred while initializing the database.");
+                "Database initialization failed.");
 
             throw;
         }
     }
 }
-
-
-
-
