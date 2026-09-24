@@ -1,0 +1,59 @@
+<div class="container mt-5">
+  <!-- Top Banner Section with Navigation Triggers -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-secondary fw-bold mb-0">Video Game Catalogue</h2>
+    <div>
+      <a routerLink="/create" class="btn btn-success rounded-pill px-4 shadow-sm fw-semibold">
+        <i class="bi bi-plus-lg me-1"></i> + Add New Video Game
+      </a>
+    </div>
+  </div>
+
+
+
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+      <table class="table table-hover table-striped mb-0 align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th class="ps-4">ID</th>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Publisher</th>
+            <th>Release Date</th>
+            <th>Metacritic Score</th>
+            <th class="text-end pe-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (game of games(); track game.id) {
+            <tr>
+              <td class="ps-4 fw-bold text-muted">#{{ game.id }}</td>
+              <td class="fw-semibold text-dark">{{ game.title }}</td>
+              <td><span class="badge bg-light text-dark border">{{ game.genre }}</span></td>
+              <td>{{ game.publisher }}</td>
+              <td>{{ game.releaseDate | date:'mediumDate' }}</td>
+              <td>
+                <span class="badge" [class.bg-success]="game.metacriticScore >= 75" [class.bg-warning]="game.metacriticScore < 75">
+                  {{ game.metacriticScore }}
+                </span>
+              </td>
+              <td class="text-end pe-4">
+                <a [routerLink]="['/edit', game.id]" class="btn btn-outline-primary btn-sm px-3 rounded-pill">
+                  Edit Entry
+                </a>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="text-center text-muted py-5">
+                No video games found in the catalogue.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
