@@ -82,32 +82,7 @@ app.UseCors("AllowAngular");
 // Handle routing patterns natively matching controller decorations
 app.MapControllers();
 
-// =========================================================================
-// 3. DATABASE SEED AND MIGRATION RUNNER UTILITY
-// =========================================================================
+// db migration and seeding on application startup
+await app.InitializeDatabaseAsync();
 
-// Use a scoped provider instance to safely handle and execute initial database structures
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var logger = services.GetRequiredService<ILogger<Program>>();
-    try
-    {
-        var dbContext = services.GetRequiredService<ApplicationDbContext>();
-
-        logger.LogInformation("Verifying local SQL Server connection state and checking database status...");
-
-        // This line runs your EF Core migrations on engine bootup automatically,
-        // removing the need to execute manual bash migration updates across host systems.
-        dbContext.Database.Migrate();
-
-        logger.LogInformation("Database structure initialized and records successfully seeded to MSSQL platform.");
-    }
-    catch (Exception ex)
-    {
-        logger.LogCritical(ex, "An unhandled execution error disrupted initial system deployment mapping.");
-    }
-}
-
-// Fire up web engine instance listening to local ports (typically port 5000/5001)
 app.Run();
