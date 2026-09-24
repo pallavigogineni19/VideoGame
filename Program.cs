@@ -1,7 +1,5 @@
 using VideoGame.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Http.Resilience;
-using Polly;
 using VideoGame.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,23 +27,7 @@ builder.Services.AddCors(options => {
               .AllowAnyHeader());
 });
 
-// Configure Resilient HTTP client factory pattern for outbound communication
-builder.Services.AddHttpClient("ExternalGameMetadataClient", client =>
-{
-    client.BaseAddress = new Uri("https://example-metadata-service.com");
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-})
-.AddStandardResilienceHandler(options =>
-{
-    // Define robust timeout strategies
-    options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(10);
-    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(3);
 
-    // Define progressive retry parameters for handling transient drop blips
-    options.Retry.MaxRetryAttempts = 3;
-    options.Retry.Delay = TimeSpan.FromMilliseconds(200);
-    options.Retry.BackoffType = DelayBackoffType.Exponential;
-});
 
 builder.Services.AddLogging(loggingBuilder =>
 {
