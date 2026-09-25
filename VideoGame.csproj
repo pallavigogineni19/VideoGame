@@ -5,6 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+   <ItemGroup>
+    <Compile Remove="VideoGame.Tests\**\*.cs" />
+    <Compile Remove="VideoGame-app\**\*.cs" />
+    <Compile Remove="VideoGameWebApp\**\*.cs" />
+    <Content Remove="VideoGame.Tests\**\*" />
+    <Content Remove="VideoGame-app\**\*" />
+    <Content Remove="VideoGameWebApp\**\*" />
+    <None Remove="VideoGame.Tests\**\*" />
+    <None Remove="VideoGame-app\**\*" />
+    <None Remove="VideoGameWebApp\**\*" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.12">
